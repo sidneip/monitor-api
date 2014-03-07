@@ -23,11 +23,17 @@ exports.add = function(req, res){
 	})
 };
 
+exports.all = function(req, res){
+
+};
+
 exports.test = function(req, res){
   website = "http://"+req.param('website');
   console.log(website);
   request(website, function(error, response, body){
-  	if(res.statusCode === 404){
+  	if(typeof response === 'undefined') {
+  		res.json('index', {error: 'Endereço não responde'});
+  	}else if(res.statusCode === 404){
   		res.json('index', {error: 'Url Incorreta', msg: 'utilize http://localhost/test/link'});
   	}else{
   		res.json('index', { webaddress: website, status: response.statusCode });
