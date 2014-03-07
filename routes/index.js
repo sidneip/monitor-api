@@ -34,3 +34,29 @@ exports.test = function(req, res){
  	} 
   })
 };
+
+exports.all = function(req, res){
+	var file = fs.readFile('./sites.json', function(err, data){
+		if(err) throw err;
+		var json = JSON.parse(data),
+			sites = json.website,
+			resJson = JSON.parse('{"status": "success", "websites" : []}');
+
+		for(var i = 0; i < sites.length; i++){
+			(function(){
+				var _website = sites[i];
+				console.log(_website);
+				request("http://"+_website, function(error, response, body){
+					var website = {};
+					website.url = "http://"+_website;
+					if(error) website.error = error
+					else website.status = response.statusCode
+					resJson.websites.push(website);
+					if(sites.length === resJson.websites.length){
+						res.json('index', resJson);
+					}
+				});
+			})();
+		}
+	});
+};

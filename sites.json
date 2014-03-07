@@ -1,5 +1,3 @@
 {
-    "website": "vejasp.abril.com.br"
-}{
-    "website": "vejasp.abril.com.br"
+    "website": ["vejasp.abril.com.br", "google.com.br", "facebook.com", "dadada.bixo"]
 }
