@@ -12,7 +12,7 @@ exports.index = function(req, res){
 exports.add = function(req, res){
 	var data = {website: req.param('website')};
 	var filename = './sites.json';
-	fs.writeFile(filename, JSON.stringify(data, null, 4), function(err){
+	fs.appendFile(filename, JSON.stringify(data, null, 4), function(err){
 		if(err){
 			console.log(err);
 			res.json('index', {error: 'Não conseguimos salvar a url'});
