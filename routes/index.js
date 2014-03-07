@@ -11,7 +11,7 @@ exports.index = function(req, res){
 
 exports.add = function(req, res){
 	function urlExists(url){
-		fs.readFile('./sites.json', 'utf-8', function (err, data)){
+		fs.readFile('./sites.json', 'utf-8', function (err, data){
 			if (err){
 				console.log('Error: ' + err);
 				res.json('index', {msg: 'erro inesperado'});
@@ -19,7 +19,7 @@ exports.add = function(req, res){
 			}
 			data = JSON.parse(data);
 			console.log(data);
-		}
+		})
 	}
 	urlExists('teste');
 	var data = {website: req.param('website')};
