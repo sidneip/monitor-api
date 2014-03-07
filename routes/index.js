@@ -1,5 +1,34 @@
-var request = require("request");
-var fs = require('fs');
+var request = require("request"),
+	mongoose = require('mongoose'),
+	dbURI = 'mongodb://localhost/websites',
+	fs = require('fs');
+
+var websiteSchema = mongoose.Schema({
+	url: String
+});
+var Website = mongoose.model('Website', websiteSchema);
+
+function getdb(){
+	mongoose.connect(dbURI);
+	return mongoose.connection;
+}
+
+function disconect(){mongoose.disconect};
+
+exports.testdb = function(req, res){
+	db = getdb();
+	db.on('error', function(){
+		console.error.bind(console, 'connection error:');
+		res.end('falha');
+	});
+	db.once('open', function callback(){
+		res.JSON('success');
+	});
+}
+
+
+
+
 
 /*
  * GET home page.
@@ -10,33 +39,22 @@ exports.index = function(req, res){
 };
 
 exports.add = function(req, res){
-	function urlExists(url){
-		fs.readFile('./sites.json', 'utf-8', function (err, data){
-			if (err){
-				console.log('Error: ' + err);
-				res.json('index', {msg: 'erro inesperado'});
-				return false;
-			}
-			data = JSON.parse(data);
-			console.log(data);
-		})
-	}
-	urlExists('teste');
-	var data = {website: req.param('website')};
-	var filename = './sites.json';
-	fs.appendFile(filename, JSON.stringify(data, null, 4), function(err){
-		if(err){
-			console.log(err);
-			res.json('index', {error: 'Não conseguimos salvar a url'});
-		}else{
-			console.log("URL ADICIONADA AO MONITOR");
-			res.json('index',{msg: 'URL Adicionada ao monitor'});
-		}
-	})
-};
-
-exports.all = function(req, res){
-
+	var url = req.param('website'),
+		db = getdb();
+	var newEntry = new Website({url: url});
+	disconect();
+	Website.findOne({url:'google.com.br'});
+	console.log(Website);
+	res.json('index', newEntry);
+	// fs.appendFile(filename, JSON.stringify(url, null, 4), function(err){
+	// 	if(err){
+	// 		console.log(err);
+	// 		res.json('index', {error: 'Não conseguimos salvar a url'});
+	// 	}else{
+	// 		console.log("URL ADICIONADA AO MONITOR");
+	// 		res.json('index',{msg: 'URL Adicionada ao monitor'});
+	// 	}
+	// })
 };
 
 exports.test = function(req, res){
@@ -56,7 +74,7 @@ exports.test = function(req, res){
 };
 
 exports.all = function(req, res){
-	var file = fs.readFile('./sites.json', function(err, data){
+	var file = fs.readFile(filename, function(err, data){
 		if(err) throw err;
 		var json = JSON.parse(data),
 			sites = json.website,
