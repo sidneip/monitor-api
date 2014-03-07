@@ -10,6 +10,18 @@ exports.index = function(req, res){
 };
 
 exports.add = function(req, res){
+	function urlExists(url){
+		fs.readFile('./sites.json', 'utf-8', function (err, data){
+			if (err){
+				console.log('Error: ' + err);
+				res.json('index', {msg: 'erro inesperado'});
+				return false;
+			}
+			data = JSON.parse(data);
+			console.log(data);
+		})
+	}
+	urlExists('teste');
 	var data = {website: req.param('website')};
 	var filename = './sites.json';
 	fs.appendFile(filename, JSON.stringify(data, null, 4), function(err){
@@ -23,14 +35,22 @@ exports.add = function(req, res){
 	})
 };
 
+exports.all = function(req, res){
+
+};
+
 exports.test = function(req, res){
   website = "http://"+req.param('website');
   console.log(website);
+  var start = new Date();
   request(website, function(error, response, body){
-  	if(res.statusCode === 404){
+  	responseTime = new Date() - start;
+  	if(typeof response === 'undefined') {
+  		res.json('index', {error: 'Endereço não responde'});
+  	}else if(res.statusCode === 404){
   		res.json('index', {error: 'Url Incorreta', msg: 'utilize http://localhost/test/link'});
   	}else{
-  		res.json('index', { webaddress: website, status: response.statusCode });
+  		res.json('index', { webaddress: website, status: response.statusCode, timeRespose: responseTime });
  	} 
   })
 };
