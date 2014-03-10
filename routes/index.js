@@ -1,60 +1,28 @@
 var request = require("request"),
 	mongoose = require('mongoose'),
 	dbURI = 'mongodb://localhost/websites',
-	fs = require('fs');
+	fs = require('fs'),
+	website1 = require('../model/website');
 
-var websiteSchema = mongoose.Schema({
-	url: String
-});
-var Website = mongoose.model('Website', websiteSchema);
+mongoose.set('debug', true);
 
-function getdb(){
-	mongoose.connect(dbURI);
-	return mongoose.connection;
-}
-
-function disconect(){mongoose.disconect};
-
-exports.testdb = function(req, res){
-	db = getdb();
-	db.on('error', function(){
-		console.error.bind(console, 'connection error:');
-		res.end('falha');
-	});
-	db.once('open', function callback(){
-		res.JSON('success');
-	});
-}
-
-
-
-
-
-/*
- * GET home page.
- */
 
 exports.index = function(req, res){
   res.render('index', { title: 'Express' });
 };
 
 exports.add = function(req, res){
-	var url = req.param('website'),
-		db = getdb();
-	var newEntry = new Website({url: url});
-	disconect();
-	Website.findOne({url:'google.com.br'});
-	console.log(Website);
-	res.json('index', newEntry);
-	// fs.appendFile(filename, JSON.stringify(url, null, 4), function(err){
-	// 	if(err){
-	// 		console.log(err);
-	// 		res.json('index', {error: 'Não conseguimos salvar a url'});
-	// 	}else{
-	// 		console.log("URL ADICIONADA AO MONITOR");
-	// 		res.json('index',{msg: 'URL Adicionada ao monitor'});
-	// 	}
-	// })
+	var url = req.param('website');
+	website1.checkExist(url, function(err, count){
+	if(count === 0){
+		website1.adduri(url);
+		console.log("URL ADICIONADA AO MONITOR: "+url);
+		res.json('index',{msg: 'URL Adicionada ao monitor: '+url});
+	}else{
+		console.log("URL JA EXISTE: "+url);
+		res.json('index',{msg: 'URL JA CADASTRADA: '+url});
+	}
+});
 };
 
 exports.test = function(req, res){
@@ -72,6 +40,12 @@ exports.test = function(req, res){
  	} 
   })
 };
+
+exports.todos = function(req, res){
+	website1.findall(function(err, websites){
+		res.json('index', {websites:websites})
+	});
+}
 
 exports.all = function(req, res){
 	var file = fs.readFile(filename, function(err, data){
