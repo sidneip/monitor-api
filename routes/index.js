@@ -69,18 +69,24 @@ exports.todos = function(req, res){
 			})();
 		}
 	//res.json(200, {websites:websites});
-	});
+});
 }
 
-		exports.all = function(req, res){
-			var file = fs.readFile(filename, function(err, data){
-				if(err) throw err;
-				var json = JSON.parse(data),
-				sites = json.website,
-				resJson = JSON.parse('{"status": "success", "websites" : []}');
+exports.all = function(req, res){
+	var file = fs.readFile(filename, function(err, data){
+		if(err) throw err;
+		var json = JSON.parse(data),
+		sites = json.website,
+		resJson = JSON.parse('{"status": "success", "websites" : []}');
 
-				for(var i = 0; i < sites.length; i++){
-					
-				}
-			});
-		};
+		for(var i = 0; i < sites.length; i++){
+
+		}
+	});
+};
+
+exports.remove = function(req, res){
+	var url = req.param('website');
+	website1.deleteItem(url);
+	res.json('index',{msg: 'URL DELETADA: '+url});
+}

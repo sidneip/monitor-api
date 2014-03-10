@@ -48,3 +48,10 @@ exports.checkExist = function checkExist(urilink,callback){
 	});
 }
 
+exports.deleteItem = function deleteItem(urilink){
+	var Website = mongoose.model('Website');
+	Website.find({'uri':urilink},function(err, websites){
+		console.log("URI DELETADAS: "+ websites);
+	}).remove().exec();
+}
+
