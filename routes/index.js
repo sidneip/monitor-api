@@ -87,6 +87,12 @@ exports.all = function(req, res){
 
 exports.remove = function(req, res){
 	var url = req.param('website');
-	website1.deleteItem(url);
-	res.json('index',{msg: 'URL DELETADA: '+url});
+	website1.checkExist(url, function(err, count){
+		if(count > 0){
+			website1.deleteItem(url);
+			res.json('index',{msg: 'URL DELETADA: '+url});
+		}else{
+			res.json('index',{msg: 'URL NÃO ENCONTRADA: '+url});
+		}
+	});
 }
