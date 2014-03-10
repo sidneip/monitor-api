@@ -43,11 +43,32 @@ exports.test = function(req, res){
 
 exports.todos = function(req, res){
 	website1.findall(function(err, websites){
+		var resJson = JSON.parse('{"status": "success", "websites" : []}');
+
 		for(var i in websites){
 			website = websites[i];
 			console.log(website.uri);
+			(function(){
+				var uri = website.uri || website.url;
+				console.log(uri);
+				var now = new Date();
+				request("http://"+uri, function(error, response, body){
+					var website = {};
+					website.url = "http://"+uri;
+					if(error) {
+						website.error = error
+					} else{
+						website.status = response.statusCode
+						website.responseTime = (new Date()) - now;	
+					} 
+					resJson.websites.push(website);
+					if(websites.length === resJson.websites.length){
+						res.json(200, resJson);
+					}
+				});
+			})();
 		}
-	res.json(200, {websites:websites});
+	//res.json(200, {websites:websites});
 	});
 }
 
@@ -59,20 +80,7 @@ exports.todos = function(req, res){
 				resJson = JSON.parse('{"status": "success", "websites" : []}');
 
 				for(var i = 0; i < sites.length; i++){
-					(function(){
-						var _website = sites[i];
-						console.log(_website);
-						request("http://"+_website, function(error, response, body){
-							var website = {};
-							website.url = "http://"+_website;
-							if(error) website.error = error
-								else website.status = response.statusCode
-									resJson.websites.push(website);
-								if(sites.length === resJson.websites.length){
-									res.json('index', resJson);
-								}
-							});
-					})();
+					
 				}
 			});
 		};
