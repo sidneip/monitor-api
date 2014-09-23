@@ -1,7 +1,9 @@
-monitor-api
+Rota HeartBeat
 ===========
 
-monitor api nodejs
+Uma simples APP para criar uma Rota Heartbeat para monitorar os seus serviços API!
+
+Segue a instruções para utilização
 
 npm install,
 executar mongod para iniciar mongo
