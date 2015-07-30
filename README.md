@@ -1,24 +1,22 @@
-Rota HeartBeat
-===========
+# MONITOR-API 
 
-Uma simples APP para criar uma Rota Heartbeat para monitorar os seus serviços API!
+The sample APP to monitor their APIS or Websites.
 
-Segue a instruções para utilização
+Application HEARTBEAT ROUTE!
 
-npm install,
-executar mongod para iniciar mongo
+Basic useful feature list:
+
+ * Add address(apis, websites) for monitor.
+ * test address is on.
+ * Verify status all address.
+ * remove address.
+
+UP Project and add features! :+1:
+
+```
+git clone https://github.com/sidneip/monitor-api.git
+npm install
+mongod
 node app.js
+```
 
-http://localhost:3001
-
-app.get('/add/:website', routes.add)
--> add pagina para resultados
-
-app.get('/test/:website*', routes.test);
-->testar unica url
-
-app.get('/todos', routes.todos);
-->Verificar todas as url adicionadas
-
-app.get('/remove/:website*', routes.remove)
--> remover uma url dos testes
