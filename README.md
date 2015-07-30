@@ -22,8 +22,8 @@ node app.js
 
 ###### .
 ```
-app.get('/add/:website', routes.add)
+app.post('/add/:website', routes.add)
 app.get('/test/:website*', routes.test);
 app.get('/todos', routes.todos);
-app.get('/remove/:website*', routes.remove)
+app.delete('/remove/:website*', routes.remove)
 ```
