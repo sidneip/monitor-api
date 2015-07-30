@@ -20,3 +20,10 @@ mongod
 node app.js
 ```
 
+###### .
+```
+app.get('/add/:website', routes.add)
+app.get('/test/:website*', routes.test);
+app.get('/todos', routes.todos);
+app.get('/remove/:website*', routes.remove)
+```
